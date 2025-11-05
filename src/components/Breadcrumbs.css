@@ -1,0 +1,31 @@
+.breadcrumbs {
+  background: transparent;
+  font-family: 'Inter', sans-serif; /* единый шрифт */
+  font-size: 1.1rem; /* размер шрифта одинаковый */
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.breadcrumbs .breadcrumb-item a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs .breadcrumb-item a:hover {
+  color: #01A950; /* выделение при наведении */
+  text-decoration: underline;
+}
+
+.breadcrumbs .breadcrumb-item.active {
+  color: #01A950; /* активная крошка */
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Обертка для одинакового отступа */
+.breadcrumbs-wrapper {
+  width: 100%;
+  margin-bottom: 20px;
+}

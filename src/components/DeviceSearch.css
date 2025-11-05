@@ -1,0 +1,34 @@
+.no-focus-outline:focus {
+  outline: none;                  /* убираем стандартный фокус */
+  box-shadow: none;              /* убираем тень при фокусе */
+  border-color: #01A950;         /* зеленая обводка */
+  border-width: 2px;             /* толщина обводки */
+}
+
+.device-search {
+  max-width: 750px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.no-focus-outline:focus,
+.no-focus-outline:active {
+  outline: none !important;       /* убираем стандартный контур */
+  box-shadow: none !important;    /* убираем тень при фокусе */
+  border-color: #01A950 !important; /* зеленая обводка */
+  border-width: 1px !important;   /* толщина обводки */
+}
+
+.device-search input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+  height: 38px;
+}

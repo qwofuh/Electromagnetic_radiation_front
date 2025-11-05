@@ -1,0 +1,12 @@
+.devices-page {
+  font-family: 'Inter', sans-serif;
+  background-color: #faf9f7;
+  min-height: 100vh;
+  color: #000;
+}
+
+.devices-title {
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-align: left;
+}

@@ -1,0 +1,43 @@
+.homepage {
+  font-family: 'Inter', sans-serif;
+  background-color: #faf9f7;
+  color: #000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-card {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 700px;
+}
+
+.homepage-card h1 {
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-align: center;
+  line-height: 2.2rem; /* увеличивает расстояние между строками */
+}
+    
+
+.homepage-card .card-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.btn-warning {
+  background-color: #01A950 !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 28px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-warning:hover {
+  background-color: #01A950;
+}

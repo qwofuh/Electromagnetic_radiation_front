@@ -1,0 +1,42 @@
+.navbar-logo {
+  height: 70px;
+  width: auto;
+}
+
+.navbar-logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #01A950;
+}
+
+/* Активная ссылка */
+.nav-link.active {
+  color: #fff !important;
+  background-color: #01A950;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
