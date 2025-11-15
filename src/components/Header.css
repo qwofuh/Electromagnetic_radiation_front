@@ -13,9 +13,20 @@
   margin-bottom: 0;
 }
 
+/* Основной контейнер навигации */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Навигационные ссылки - теперь справа */
 .navbar-links {
   display: flex;
   gap: 24px;
+  align-items: center;
+  margin-left: auto;
 }
 
 .nav-link {
@@ -39,4 +50,67 @@
   border-radius: 6px;
   font-weight: 600;
   transition: background-color 0.3s ease;
+}
+
+/* Стили для иконки калькулятора */
+.calc-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
+.calc-icon:hover {
+  background-color: #01A950;
+  color: white;
+  transform: scale(1.05);
+}
+
+.calc-icon.active {
+  background-color: #01A950;
+  color: white;
+}
+
+.calc-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Бейдж с количеством расчётов */
+.calc-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Для мобильной версии */
+@media (max-width: 991px) {
+  .navbar-links {
+    gap: 16px;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+  
+  .calc-icon {
+    margin-left: 0;
+  }
 }

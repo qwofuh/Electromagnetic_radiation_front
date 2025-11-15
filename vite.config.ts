@@ -13,4 +13,5 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  base: "/Electromagnetic_radiation_front"
 })
