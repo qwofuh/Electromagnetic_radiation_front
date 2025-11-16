@@ -104,13 +104,60 @@
 
 /* Для мобильной версии */
 @media (max-width: 991px) {
+  .navbar-logo {
+    height: 50px;
+  }
+  
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 15px;
+  }
+  
   .navbar-links {
-    gap: 16px;
-    margin-top: 10px;
+    gap: 8px;
     margin-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .nav-link {
+    padding: 10px 15px;
+    width: 100%;
+    text-align: left;
+    border-radius: 4px;
+  }
+  
+  .nav-link.active {
+    width: fit-content;
   }
   
   .calc-icon {
-    margin-left: 0;
+    margin: 5px 0;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-logo {
+    height: 40px;
+  }
+  
+  .nav-link {
+    font-size: 0.9rem;
+  }
+  
+  .navbar-toggler {
+    margin-left: auto; /* Кнопка меню справа */
+  }
+  
+  .navbar-container {
+    flex-wrap: nowrap;
   }
 }

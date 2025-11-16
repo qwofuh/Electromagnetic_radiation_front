@@ -1,5 +1,6 @@
 .device-card {
-  width: 300px;       /* чуть шире */
+  width: 100%;
+  max-width: 300px;
   background: #ffffff;
   border: 1px solid #01A950 !important;
   border-radius: 8px !important;
@@ -7,7 +8,8 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 450px !important;      /* фиксированная высота для всех карточек */
+  height: 450px;
+  margin: 0 auto;
 }
 
 .card-image {
@@ -20,7 +22,8 @@
 }
 
 .card-image img {
-  width: 220px;       /* чуть шире, чтобы соответствовало карточке */
+  width: 100%;
+  max-width: 220px;
   height: 220px;
   object-fit: cover;
   border-radius: 0;
@@ -43,9 +46,10 @@
   text-align: left;
   margin: 0;
   padding: 0;
-  min-height: 60px;       /* фиксированная высота для текста */
-  overflow: hidden;       /* обрезаем, если текст слишком длинный */
+  min-height: 60px;
+  overflow: hidden;
   display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
@@ -74,7 +78,6 @@
   text-align: left;
 }
 
-/* Ссылка-карточка */
 .card-link {
   display: block;
   text-decoration: none;
@@ -82,3 +85,60 @@
   height: 100%;
 }
 
+/* Адаптивность для карточек */
+@media (max-width: 1200px) {
+  .device-card {
+    max-width: 280px;
+    height: 430px;
+  }
+  
+  .card-image img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .device-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 400px;
+  }
+  
+  .card-image img {
+    height: 180px;
+    max-width: 180px;
+  }
+  
+  .card-title {
+    font-size: 14px;
+    line-height: 18px;
+    min-height: 54px;
+  }
+  
+  .card-volume {
+    font-size: 16px;
+  }
+  
+  .card-count {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .device-card {
+    min-height: 350px;
+    padding: 8px;
+  }
+  
+  .card-image img {
+    height: 150px;
+    max-width: 150px;
+  }
+  
+  .card-title {
+    font-size: 13px;
+    line-height: 16px;
+    min-height: 48px;
+    -webkit-line-clamp: 2;
+  }
+}

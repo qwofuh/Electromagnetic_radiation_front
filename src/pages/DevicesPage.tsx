@@ -1,53 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useSelector} from "react-redux";
+import type { RootState } from "../store";
 import { Breadcrumbs } from "../components/Breadcrumbs";
-import { DeviceCard } from "../components/DeviceCard";
 import { DeviceSearch } from "../components/DeviceSearch";
-import { getDevices, type Device } from "../modules/deviceApi";
-import "../components/DeviceSearch.css";
+import { DeviceCard } from "../components/DeviceCard";
+import { getDevices, mapServerToDevice } from "../modules/deviceApi";
 import "./DevicesPage.css";
-import DefaultImage from "../assets/DefaultImage.png"
+import type { Device } from "../modules/deviceApi";
 
 export const DevicesPage: React.FC = () => {
-  const [devices, setDevices] = useState<Device[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]); 
   const [loading, setLoading] = useState(true);
+  const query = useSelector((state: RootState) => state.filter.query); // Берем из Redux
 
-  const handleSearch = (query: string) => {
+  // Загрузка устройств при монтировании и при изменении query
+  useEffect(() => {
+    const loadDevices = async () => {
+      setLoading(true);
+      try {
+        const response = await getDevices(query);
+        const mappedDevices = response.devices.map(mapServerToDevice);
+        setDevices(mappedDevices);
+      } catch (error) {
+        console.error("Ошибка загрузки устройств:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDevices();
+  }, []);
+
+  const handleSearch = (searchQuery: string) => {
+  const loadSearchedDevices = async () => {
     setLoading(true);
-    getDevices(query)
-      .then((response) => {
-
-        // Правильный маппинг полей вручную
-        const devicesData = response.devices.map(device => ({
-          id: device.ID,
-          title: device.Title,
-          image: device.Image || DefaultImage,
-          minavgpower: device.AvgMinPower,
-          maxavgpower: device.AvgMaxPower,
-          minsaferange: device.MinSafeRange,
-          maxsaferange: device.MaxSafeRange,
-          radiationtype: device.RadiationType,
-          radiationsource: device.RadiationSource,
-          maxradiationzone: device.MaxRadiationZone,
-          visability: device.Visability ?? true
-        }));
-        setDevices(devicesData);
-      })
-      .catch((error) => {
-        console.error("Ошибка при загрузке устройств:", error);
-      })
-      .finally(() => setLoading(false));
+    try {
+      const response = await getDevices(searchQuery); // Поиск только здесь
+      const mappedDevices = response.devices.map(mapServerToDevice);
+      setDevices(mappedDevices);
+    } catch (error) {
+      console.error("Ошибка поиска устройств:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    handleSearch("");
-  }, []);
+  loadSearchedDevices();
+};
 
   return (
     <div className="devices-page">
       <Container className="py-4">
-        <div className="d-flex justify-content-between align-items-center mb-3 breadcrumbs-wrapper">
+        <div className="mb-3">
           <Breadcrumbs items={[{ name: "Каталог", path: "/catalog" }]} />
+        </div>
+
+        <div className="mb-4">
           <DeviceSearch onSearch={handleSearch} />
         </div>
 

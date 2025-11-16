@@ -1,14 +1,45 @@
+.device-detail-page {
+  font-family: 'Inter', sans-serif;
+  background-color: #faf9f7;
+  min-height: 100vh;
+  color: #000;
+  padding: 20px 0;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.device-detail-page .container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+.device-detail-page .breadcrumbs-wrapper {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
 .device-container {
   display: flex;
   flex-direction: row;
-  gap: 100px;
+  gap: 60px;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.device-image {
+  flex: 0 0 auto;
 }
 
 .device-image img {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: 400px;
   object-fit: cover;
   border-radius: 3px;
@@ -20,15 +51,15 @@
   border-radius: 14px;
   padding: 30px 25px;
   box-sizing: border-box;
-  flex: 0 1 500px;
+  flex: 1;
+  min-width: 0; /* Важно для flex-элементов */
+  max-width: 500px;
   min-height: 400px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* заголовок слева */
   gap: 20px;
 }
 
-/* Заголовок остаётся без отступа */
 .device-title {
   font-weight: 700;
   font-size: 24px;
@@ -37,10 +68,9 @@
   margin-bottom: 10px;
   text-align: center;
   width: 100%;
+  word-wrap: break-word;
 }
 
-
-/* Сдвигаем все остальные данные вправо */
 .device-details {
   flex: 1;
   display: flex;
@@ -53,36 +83,129 @@
   line-height: 22px;
   color: #000;
   width: 100%;
-  max-width: 400px;
-  margin-left: 50px; /* вот этот сдвиг вправо */
+  min-width: 0; /* Важно */
 }
-
 
 .device-details div {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .device-details .name {
   font-weight: 500;
   text-align: left;
-  flex: 0 0 160px;
+  flex: 1;
+  min-width: 200px;
 }
 
 .device-details .value {
-  text-align: center;
-  flex: 1;
+  text-align: right;
+  flex: 0 0 auto;
+  max-width: 200px;
+  word-break: break-word;
 }
 
-.device-detail-page .breadcrumbs-wrapper {
-  margin-top: 40px; /* конкретно для этой страницы */
+/* Адаптивность для планшетов */
+@media (max-width: 992px) {
+  .device-container {
+    gap: 40px;
+  }
+  
+  .device-image img {
+    max-width: 350px;
+    height: 350px;
+  }
+  
+  .device-info-wrapper {
+    max-width: 450px;
+    padding: 25px 20px;
+  }
+  
+  .device-details {
+    font-size: 16px;
+    margin-left: 0;
+  }
+  
+  .device-details .name {
+    min-width: 180px;
+  }
 }
 
-.device-detail-page {
-  font-family: 'Inter', sans-serif;
-  background-color: #faf9f7;
-  min-height: 100vh;
-  color: #000;
-  padding: 20px 0;
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .device-container {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .device-image img {
+    max-width: 300px;
+    height: 300px;
+  }
+  
+  .device-info-wrapper {
+    max-width: 100%;
+    width: 100%;
+    min-height: auto;
+    padding: 20px 15px;
+  }
+  
+  .device-title {
+    font-size: 20px;
+  }
+  
+  .device-details {
+    font-size: 15px;
+    gap: 10px;
+  }
+  
+  .device-details div {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .device-details .name {
+    min-width: auto;
+    font-weight: 600;
+  }
+  
+  .device-details .value {
+    text-align: left;
+    max-width: 100%;
+    padding-left: 10px;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 576px) {
+  .device-detail-page .container {
+    padding: 0 10px;
+  }
+  
+  .device-image img {
+    max-width: 100%;
+    height: 250px;
+  }
+  
+  .device-info-wrapper {
+    padding: 15px 12px;
+  }
+  
+  .device-title {
+    font-size: 18px;
+  }
+  
+  .device-details {
+    font-size: 14px;
+  }
+  
+  .device-detail-page .breadcrumbs-wrapper {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
 }

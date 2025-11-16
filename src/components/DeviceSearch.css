@@ -1,34 +1,101 @@
-.no-focus-outline:focus {
-  outline: none;                  /* убираем стандартный фокус */
-  box-shadow: none;              /* убираем тень при фокусе */
-  border-color: #01A950;         /* зеленая обводка */
-  border-width: 2px;             /* толщина обводки */
+.device-search-container {
+  width: 100%;
+  padding: 0 15px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
 }
 
 .device-search {
-  max-width: 750px;
-  flex-shrink: 0;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  margin: 0 auto;
+  gap: 8px;
+}
+
+.search-input {
+  height: 36px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #01A950;
+  box-shadow: 0 0 0 2px rgba(1, 169, 80, 0.1);
+}
+
+.search-btn {
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  background-color: #01A950;
+  border: 1px solid #01A950;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.search-btn:hover {
+  background-color: #018a40;
+  border-color: #018a40;
 }
 
 .search-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
-.no-focus-outline:focus,
-.no-focus-outline:active {
-  outline: none !important;       /* убираем стандартный контур */
-  box-shadow: none !important;    /* убираем тень при фокусе */
-  border-color: #01A950 !important; /* зеленая обводка */
-  border-width: 1px !important;   /* толщина обводки */
+/* Адаптивность */
+@media (max-width: 768px) {
+  .device-search-container {
+    padding: 0 10px;
+  }
+  
+  .search-input {
+    height: 34px;
+    font-size: 16px;
+  }
+  
+  .search-btn {
+    height: 34px;
+    width: 38px;
+  }
+  
+  .search-icon {
+    width: 15px;
+    height: 15px;
+  }
 }
 
-.device-search input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 6px 12px;
-  height: 38px;
+@media (max-width: 576px) {
+  .device-search-container {
+    padding: 0 8px;
+  }
+  
+  .search-input {
+    height: 32px;
+    padding: 4px 10px;
+    font-size: 14px;
+  }
+  
+  .search-btn {
+    height: 32px;
+    width: 36px;
+  }
+  
+  .search-icon {
+    width: 14px;
+    height: 14px;
+  }
 }

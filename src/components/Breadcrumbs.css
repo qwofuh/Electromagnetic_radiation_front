@@ -29,3 +29,28 @@
   width: 100%;
   margin-bottom: 20px;
 }
+
+/* Адаптивность для хлебных крошек */
+@media (max-width: 768px) {
+  .breadcrumbs {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .breadcrumbs .breadcrumb-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .breadcrumbs {
+    font-size: 0.8rem;
+  }
+  
+  .breadcrumbs .breadcrumb-item {
+    max-width: 100px;
+  }
+}
