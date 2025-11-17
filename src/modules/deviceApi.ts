@@ -1,3 +1,5 @@
+import { dest_api } from "../../target_config"
+
 export interface Device {
   id: number;
   title: string;
@@ -41,16 +43,28 @@ export interface DeviceResponse {
  * Получение всех устройств или поиск по названию
  */
 export const getDevices = async (title = ""): Promise<ServerDevicesResponse> => {
+
   try {
-    const response = await fetch(`/api/devices?title=${encodeURIComponent(title)}`, {
+    const response = await fetch(`${dest_api}/devices?title=${encodeURIComponent(title)}`, {
       method: "GET",
     });
 
     if (!response.ok) {
       throw new Error(`Ошибка загрузки устройств: ${response.statusText}`);
     }
+    
+    const data = await response.json();
+    
+    // ОБНОВЛЕННАЯ ОТЛАДКА С ТИПАМИ:
+    console.log('Raw API image data:', data.devices.map((d: ServerDevice) => ({
+      title: d.Title,
+      image: d.Image,
+      hasFullUrl: d.Image?.includes('http'),
+      hasOnlyPath: d.Image?.startsWith('/')
+    })));
+    
+    return data;
 
-    return response.json();
   } catch (error) {
     console.warn('Сервер недоступен, используются мок-данные:', error);
     // Фильтруем мок-данные по заголовку, если указан поисковый запрос
@@ -81,19 +95,27 @@ export const getDevices = async (title = ""): Promise<ServerDevicesResponse> => 
 /**
  * Преобразование данных с сервера во frontend-формат Device
  */
-export const mapServerToDevice = (s: ServerDevice): Device => ({
-  id: s.ID,
-  title: s.Title,
-  image: s.Image ?? "",
-  minavgpower: s.AvgMinPower,
-  maxavgpower: s.AvgMaxPower,
-  minsaferange: s.MinSafeRange,
-  maxsaferange: s.MaxSafeRange,
-  radiationtype: s.RadiationType,
-  radiationsource: s.RadiationSource,
-  maxradiationzone: s.MaxRadiationZone,
-  visability: s.Visability,
-});
+export const mapServerToDevice = (s: ServerDevice): Device => {
+  // ИЗВЛЕКАЕМ ТОЛЬКО ПУТЬ ИЗ ПОЛНОГО URL
+  let imagePath = s.Image ?? "";
+  if (imagePath.includes('http://127.0.0.1:9000/')) {
+    imagePath = imagePath.replace('http://127.0.0.1:9000/', '/');
+  }
+  
+  return {
+    id: s.ID,
+    title: s.Title,
+    image: imagePath, // теперь только путь, а не полный URL
+    minavgpower: s.AvgMinPower,
+    maxavgpower: s.AvgMaxPower,
+    minsaferange: s.MinSafeRange,
+    maxsaferange: s.MaxSafeRange,
+    radiationtype: s.RadiationType,
+    radiationsource: s.RadiationSource,
+    maxradiationzone: s.MaxRadiationZone,
+    visability: s.Visability,
+  };
+};
 
 /**
  * Получение конкретного устройства по ID
@@ -101,7 +123,7 @@ export const mapServerToDevice = (s: ServerDevice): Device => ({
  */
 export const getDeviceById = async (id: number): Promise<Device> => {
   try {
-    const response = await fetch(`/api/device/${id}`, { method: "GET" });
+    const response = await fetch(`${dest_api}/device/${id}`, { method: "GET" });
 
     if (!response.ok) {
       throw new Error(`Ошибка загрузки устройства: ${response.statusText}`);

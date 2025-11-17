@@ -4,6 +4,7 @@ import { Breadcrumbs } from "../components/Breadcrumbs";
 import { getDeviceById, type Device } from "../modules/deviceApi";
 import defaultImage from "../assets/DefaultImage.png";
 import "./DeviceDetailPage.css";
+import { dest_img } from "../../target_config"
 
 export const DeviceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,7 +49,7 @@ export const DeviceDetailPage: React.FC = () => {
         <div className="device-container">
           {/* Изображение */}
           <div className="device-image">
-            <img src={device.image || defaultImage} alt={device.title} />
+            <img src={(dest_img + device.image) || defaultImage} alt={device.title} />
           </div>
 
           {/* Информация в рамке */}
