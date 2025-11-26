@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/Electromagnetic_radiation_front/dev-sw.js?dev-sw', { scope: '/Electromagnetic_radiation_front/', type: 'classic' })

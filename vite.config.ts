@@ -11,18 +11,30 @@ export default defineConfig({
     react(),
     mkcert(),
     VitePWA({
-      registerType: 'autoUpdate',
-      devOptions: { enabled: true },
-      manifest: {
-        name: "Расчёт излучения приборов",
-        short_name: "RadiationCalc",
-        start_url: "/",
-        display: "standalone", 
-        background_color: "#faf9f7",
-        theme_color: "#01A950",
-        icons: [
-          { src: "/icon-192.png", type: "image/png", sizes: "192x192" },
-          { src: "/icon-512.png", type: "image/png", sizes: "512x512" }
+  registerType: 'autoUpdate',
+  devOptions: {
+    enabled: true,
+  },
+  manifest:{
+        "name": "Расчёт излучения приборов",
+        "short_name": "RadiationCalc",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#faf9f7",
+        "theme_color": "#01A950",
+        "lang": "ru",
+        "scope": "/Electromagnetic_radiation_front/",
+        "icons": [
+          {
+            "src": "icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+          },
+          {
+            "src": "icon-512.png",
+            "type": "image/png", 
+            "sizes": "512x512"
+          }
         ]
       }
     })
@@ -35,28 +47,17 @@ export default defineConfig({
       cert: fs.readFileSync(path.resolve(__dirname, 'cert.crt')),
     },
     proxy: {
-  "/api": {
-    target: api_proxy_addr,
-    changeOrigin: true,
-    secure: false,
-  },
-  "/img-proxy": {
-    target: img_proxy_addr,
-    changeOrigin: true,
-    rewrite: (path) => path.replace(/^\/img-proxy/, ""),
-    configure: (proxy, _options) => {
-      proxy.on('error', (err, _req, _res) => {
-        console.log('proxy error', err);
-      });
-      proxy.on('proxyReq', (_proxyReq, req, _res) => {
-        console.log('Sending Request to the Target:', req.method, req.url);
-      });
-      proxy.on('proxyRes', (proxyRes, req, _res) => {
-        console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-      });
-    }
-  },
-},
+      "/api": {
+        target: api_proxy_addr,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/"),
+      },
+      "/img-proxy": {
+        target: img_proxy_addr,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img-proxy/, "")
+      },
+    },
   },
   base: dest_root
 })

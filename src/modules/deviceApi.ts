@@ -1,5 +1,8 @@
 import { dest_api } from "../../target_config"
 
+console.log("dest_api value:", dest_api);
+    console.log("Full URL:", `${dest_api}/devices?title=`);
+
 export interface Device {
   id: number;
   title: string;
@@ -45,9 +48,15 @@ export interface DeviceResponse {
 export const getDevices = async (title = ""): Promise<ServerDevicesResponse> => {
 
   try {
-    const response = await fetch(`${dest_api}/devices?title=${encodeURIComponent(title)}`, {
+    
+    const response = await fetch(`${dest_api}api/devices?title=${encodeURIComponent(title)}`, {
       method: "GET",
     });
+
+     console.log("=== RESPONSE INFO ===");
+    console.log("Status:", response.status);
+    console.log("OK:", response.ok);
+    console.log("Headers:", Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
       throw new Error(`Ошибка загрузки устройств: ${response.statusText}`);
@@ -55,18 +64,14 @@ export const getDevices = async (title = ""): Promise<ServerDevicesResponse> => 
     
     const data = await response.json();
     
-    // ОБНОВЛЕННАЯ ОТЛАДКА С ТИПАМИ:
-    console.log('Raw API image data:', data.devices.map((d: ServerDevice) => ({
-      title: d.Title,
-      image: d.Image,
-      hasFullUrl: d.Image?.includes('http'),
-      hasOnlyPath: d.Image?.startsWith('/')
-    })));
-    
     return data;
 
   } catch (error) {
-    console.warn('Сервер недоступен, используются мок-данные:', error);
+
+    console.error("=== FETCH ERROR ===");
+    console.error("Failed URL:", `${dest_api}api/devices?title=${encodeURIComponent(title)}`);
+    console.error("=== END ERROR ===");
+    
     // Фильтруем мок-данные по заголовку, если указан поисковый запрос
     const mockData = await import('./mock').then(m => m.DEVICES_MOCK);
     const filteredDevices = mockData.devices.filter(d => 
@@ -123,7 +128,7 @@ export const mapServerToDevice = (s: ServerDevice): Device => {
  */
 export const getDeviceById = async (id: number): Promise<Device> => {
   try {
-    const response = await fetch(`${dest_api}/device/${id}`, { method: "GET" });
+    const response = await fetch(`${dest_api}api/device/${id}`, { method: "GET" });
 
     if (!response.ok) {
       throw new Error(`Ошибка загрузки устройства: ${response.statusText}`);
