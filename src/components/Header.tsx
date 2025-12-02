@@ -1,11 +1,55 @@
 import React from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from '../store';
+import { logoutUserAsync } from '../slice/userSlice'; 
+import  { setQuery,  getFilteredData } from '../slice/filterSlice'; 
+import { ROUTES } from '../Routes';
 import logo from "../assets/home-icon.png";
 import "./Header.css";
+import { useEffect } from "react";
+import { getDraftCart } from "../slice/draftSlice";
 
 export const Header: React.FC = () => {
-  const calculationsCount = 0;
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const username = useSelector((state: RootState) => state.user.username);
+  const draftCount = useSelector((state: RootState) => state.draft.count); // ← получаем количество устройств в корзине
+  const currentOrder = useSelector((state: RootState) => state.draft.order_id)
+  const { order_id } = useSelector((state: RootState) => state.draft);
+  const hasDraft = !!order_id; 
+
+  // Обработчик события нажатия на кнопку "Выйти"
+  const handleExit = async ()  => {
+    console.log('Logout button clicked');
+    
+    try {
+      console.log('Dispatching logoutUserAsync...');
+      const result = await dispatch(logoutUserAsync());
+      
+      if (logoutUserAsync.fulfilled.match(result)) {
+        console.log('Logout successful, clearing search and navigating...');
+        dispatch(setQuery(''));
+        navigate(ROUTES.CATALOG);
+        dispatch(getFilteredData());
+      } else {
+        console.log('Logout failed:', result.payload);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
+
+  useEffect(() => {
+  if (isAuthenticated) {
+    dispatch(getDraftCart());
+  }
+}, [isAuthenticated, dispatch]);
+
+  console.log('Header render - isAuthenticated:', isAuthenticated, 'username:', username);
 
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
@@ -39,8 +83,12 @@ export const Header: React.FC = () => {
               </NavLink>
               
               {/* Иконка калькулятора */}
-              <NavLink
-                to="/calculator"
+            {isAuthenticated && (
+              <>
+              {hasDraft && (
+              <>
+                <NavLink
+                to={`/emission_calculations/${currentOrder}`}
                 className={({ isActive }) =>
                   isActive ? "calc-icon active" : "calc-icon"
                 }
@@ -55,12 +103,44 @@ export const Header: React.FC = () => {
                 </svg>
                 
                 {/* Бейдж с количеством расчётов (показывается только если count > 0) */}
-                {calculationsCount > 0 && (
+                {draftCount > 0 && (
                   <span className="calc-badge">
-                    {calculationsCount > 9 ? '9+' : calculationsCount}
+                    {draftCount > 9 ? '9+' : draftCount}
                   </span>
                 )}
               </NavLink>
+              </>
+              )}
+              <Nav.Link as={Link} to="/my-orders">Мои заявки</Nav.Link>
+              </>
+            )}
+              
+
+              {/* Приветствие и кнопки входа/выхода */}
+              {isAuthenticated && username && (
+              <>
+                <div className="user-greeting">
+                  Добро пожаловать, {username}!
+                </div>
+                <Nav.Link as={Link} to="/profile">Личный кабинет</Nav.Link>
+              </>
+              )}
+
+              {(isAuthenticated == false) && (
+                <Link to={ROUTES.LOGIN} className="login-link">
+                  <Button className="login-btn">Войти</Button>
+                </Link>
+              )}
+
+              {(isAuthenticated == true) && (
+                <Button 
+                  variant="primary" 
+                  className="login-btn" 
+                  onClick={handleExit}
+                >
+                  Выйти
+                </Button>
+              )}
             </Nav>
           </Navbar.Collapse>
         </div>

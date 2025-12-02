@@ -84,6 +84,12 @@
   height: 20px;
 }
 
+.login-btn {
+  color: white !important;
+  background-color: #01A950 !important;
+  border: none !important;
+}
+
 /* Бейдж с количеством расчётов */
 .calc-badge {
   position: absolute;

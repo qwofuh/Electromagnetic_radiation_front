@@ -1,53 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useSelector} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { DeviceSearch } from "../components/DeviceSearch";
 import { DeviceCard } from "../components/DeviceCard";
-import { getDevices, mapServerToDevice } from "../modules/deviceApi";
 import "./DevicesPage.css";
 import type { Device } from "../modules/deviceApi";
+import { getFilteredData, setQuery } from "../slice/filterSlice";
+import type { AppDispatch } from "../store";
+import type{ DsDevice } from "../api/Api";
+
+const mapDsDeviceToDevice = (dsDevice: DsDevice): Device => ({
+  id: dsDevice.id || 0,
+  title: dsDevice.title || '',
+  image: dsDevice.image || '',
+  minavgpower: dsDevice.avgMinPower || 0,
+  maxavgpower: dsDevice.avgMaxPower || 0,
+  minsaferange: dsDevice.minSafeRange || 0,
+  maxsaferange: dsDevice.maxSafeRange || 0,
+  radiationtype: dsDevice.radiationType || '',
+  radiationsource: dsDevice.radiationSource || '',
+  maxradiationzone: dsDevice.maxRadiationZone || '',
+  visability: dsDevice.visability,
+});
 
 export const DevicesPage: React.FC = () => {
-  const [devices, setDevices] = useState<Device[]>([]); 
-  const [loading, setLoading] = useState(true);
-  const query = useSelector((state: RootState) => state.filter.query); // Берем из Redux
+  const dispatch = useDispatch<AppDispatch>();
+  const { query, data, loading } = useSelector((state: RootState) => state.filter);
 
-  // Загрузка устройств при монтировании и при изменении query
   useEffect(() => {
-    const loadDevices = async () => {
-      setLoading(true);
-      try {
-        const response = await getDevices(query);
-        const mappedDevices = response.devices.map(mapServerToDevice);
-        setDevices(mappedDevices);
-      } catch (error) {
-        console.error("Ошибка загрузки устройств:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadDevices();
-  }, []);
+    dispatch(getFilteredData());
+  }, [dispatch]);
 
   const handleSearch = (searchQuery: string) => {
-  const loadSearchedDevices = async () => {
-    setLoading(true);
-    try {
-      const response = await getDevices(searchQuery); // Поиск только здесь
-      const mappedDevices = response.devices.map(mapServerToDevice);
-      setDevices(mappedDevices);
-    } catch (error) {
-      console.error("Ошибка поиска устройств:", error);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(setQuery(searchQuery));
+    dispatch(getFilteredData());
   };
 
-  loadSearchedDevices();
-};
+  const devices = data.map(mapDsDeviceToDevice);
 
   return (
     <div className="devices-page">
@@ -64,8 +55,8 @@ export const DevicesPage: React.FC = () => {
           <div className="text-center mt-5">Загрузка...</div>
         ) : (
           <Row className="g-4">
-            {devices.map((device) => (
-              <Col key={device.id} xs={12} sm={6} md={4} lg={3}>
+            {devices.map((device, index) => (
+              <Col key={device.id || `device-${index}`} xs={12} sm={6} md={4} lg={3}>
                 <DeviceCard {...device} />
               </Col>
             ))}

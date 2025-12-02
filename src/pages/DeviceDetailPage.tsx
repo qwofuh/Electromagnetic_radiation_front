@@ -1,36 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Breadcrumbs } from "../components/Breadcrumbs";
-import { getDeviceById, type Device } from "../modules/deviceApi";
 import defaultImage from "../assets/DefaultImage.png";
 import "./DeviceDetailPage.css";
 import { dest_img } from "../../target_config"
+import { getDeviceDetail, clearDevice } from "../slice/deviceDetailSlice";
+import type { AppDispatch, RootState } from "../store";
+import type{ DsDevice } from "../api/Api";
+
+// Функция преобразования DsDevice в Device (аналогично DevicesPage)
+const mapDsDeviceToDevice = (dsDevice: DsDevice) => ({
+  id: dsDevice.id || 0,
+  title: dsDevice.title || '',
+  image: dsDevice.image || '',
+  minavgpower: dsDevice.avgMinPower || 0,
+  maxavgpower: dsDevice.avgMaxPower || 0,
+  minsaferange: dsDevice.minSafeRange || 0,
+  maxsaferange: dsDevice.maxSafeRange || 0,
+  radiationtype: dsDevice.radiationType || '',
+  radiationsource: dsDevice.radiationSource || '',
+  maxradiationzone: dsDevice.maxRadiationZone || '',
+});
 
 export const DeviceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [device, setDevice] = useState<Device | null>(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const { device: dsDevice, loading, error } = useSelector((state: RootState) => state.deviceDetail);
 
   useEffect(() => {
     if (!id) return;
 
-    getDeviceById(Number(id))
-      .then((data) => {
-        setDevice(data)
-      })
-      .catch((error) =>
-        console.error("Ошибка при загрузке устройства:", error)
-      )
-      .finally(() => setLoading(false));
-  }, [id]);
+    dispatch(getDeviceDetail(Number(id)));
+
+    // Очищаем устройство при размонтировании
+    return () => {
+      dispatch(clearDevice());
+    };
+  }, [id, dispatch]);
 
   if (loading) {
     return <div className="text-center mt-5">Загрузка...</div>;
   }
 
-  if (!device) {
-    return <div>Устройство не найдено</div>;
+  if (error || !dsDevice) {
+    return <div>{error || "Устройство не найдено"}</div>;
   }
+
+  // Преобразуем DsDevice в Device
+  const device = mapDsDeviceToDevice(dsDevice);
+
+  // Функция для формирования URL изображения
+  const getImageSrc = () => {
+    if (!device.image) return defaultImage;
+    if (device.image.startsWith('http')) return device.image;
+    return device.image.startsWith('/') ? `${dest_img}${device.image}` : `${dest_img}/${device.image}`;
+  };
+
+  const imageSrc = getImageSrc();
 
   return (
     <div className="device-detail-page">
@@ -49,7 +76,7 @@ export const DeviceDetailPage: React.FC = () => {
         <div className="device-container">
           {/* Изображение */}
           <div className="device-image">
-            <img src={(dest_img + device.image) || defaultImage} alt={device.title} />
+            <img src={imageSrc} alt={device.title} />
           </div>
 
           {/* Информация в рамке */}

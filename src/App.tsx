@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { invoke } from "@tauri-apps/api/core"; // Импортируем invoke
-import { HomePage } from "./pages/HomePage";
-import { DevicesPage } from "./pages/DevicesPage";
-import { DeviceDetailPage } from "./pages/DeviceDetailPage";
 import { Header } from "./components/Header";
 import { dest_root } from "../target_config"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AppRoutes } from "./AppRoutes";
 
 export const App: React.FC = () => {
+
   useEffect(() => {
     // Вызываем Tauri команду при монтировании компонента
     invoke('tauri', { cmd: 'create' })
@@ -33,11 +34,18 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter basename={dest_root}> 
         <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/catalog" element={<DevicesPage />} />
-          <Route path="/detailed_device/:id" element={<DeviceDetailPage />} />
-        </Routes>
+        <AppRoutes /> {/* ⬅️ используй AppRoutes вместо прямых Routes */}
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </BrowserRouter>
   );
 };
