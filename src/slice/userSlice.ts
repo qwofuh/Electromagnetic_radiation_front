@@ -63,6 +63,7 @@ export const loginUserAsync = createAsyncThunk(
         throw new Error('Токен не найден в заголовках ответа');
       }
       
+      
       // Сохраняем ПОЛНЫЙ токен в localStorage (с "Bearer ")
       localStorage.setItem('token', token);
       
@@ -76,6 +77,7 @@ export const loginUserAsync = createAsyncThunk(
         username: credentials.login,
         token: token,
         userId: userId
+
       };
     } catch (error) {
       console.error('Login error:', error);

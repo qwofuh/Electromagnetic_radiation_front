@@ -181,10 +181,10 @@ export const getUserOrders = createAsyncThunk(
   'draft/getUserOrders',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.api.emissionsCalculationList();
+      const response = await api.api.emissionsCalculationUserList();
       return response.data; // ⬅️ возвращаем только data
     } catch (error) {
-      return rejectWithValue('Ошибка получения списка заявок');
+      return rejectWithValue('');
     }
   }
 );

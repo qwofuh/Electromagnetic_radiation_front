@@ -611,6 +611,36 @@ export class Api<
       }),
 
     /**
+     * @description Возвращает список заказов с возможностью фильтрации по статусу и диапазону дат. Разрешённые статусы: "сформирован", "завершен", "отклонен".
+     *
+     * @tags Заявки с устройствами
+     * @name EmissionsCalculationUserList
+     * @summary Получить список заказов
+     * @request GET:/api/emissions_calculation/user
+     * @secure
+     */
+    emissionsCalculationUserList: (
+      query?: {
+        /** Статус заказа (сформирован, завершен, отклонен), можно указать несколько через запятую */
+        status?: string;
+        /** Дата начала фильтрации (формат YYYY-MM-DD) */
+        start?: string;
+        /** Дата окончания фильтрации (формат YYYY-MM-DD) */
+        end?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<DsEmissionListResponse, DsErrorResponse>({
+        path: `/api/emissions_calculation/user`,
+        method: "GET",
+        query: query,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Возвращает информацию о пользователе по его ID (логин и роль)
      *
      * @tags Управление пользователями

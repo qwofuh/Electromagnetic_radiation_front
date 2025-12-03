@@ -8,6 +8,7 @@ import { DraftOrderPage } from "./pages/DraftOrderPage";
 import { MyOrdersPage } from "./pages/MyOrdersPage";
 import ProfilePage from "./pages/ProfilePage";
 import { ROUTES } from './Routes';
+import AllOrdersPage from "./pages/AllOrdersPage";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ export const AppRoutes: React.FC = () => {
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/my-orders" element={<MyOrdersPage />} />
+      <Route path="/all-orders" element={<AllOrdersPage />} />
       <Route 
         path={ROUTES.DRAFT} 
         element={<DraftOrderPage key={location.pathname} />} 

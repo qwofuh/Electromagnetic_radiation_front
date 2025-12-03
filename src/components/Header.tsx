@@ -20,7 +20,28 @@ export const Header: React.FC = () => {
   const draftCount = useSelector((state: RootState) => state.draft.count); // ← получаем количество устройств в корзине
   const currentOrder = useSelector((state: RootState) => state.draft.order_id)
   const { order_id } = useSelector((state: RootState) => state.draft);
-  const hasDraft = !!order_id; 
+  const hasDraft = !!order_id;
+  
+const getRoleFromToken = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const tokenParts = token.split(' ');
+      if (tokenParts.length === 2 && tokenParts[0] === 'Bearer') {
+        const jwtToken = tokenParts[1];
+        const payload = JSON.parse(atob(jwtToken.split('.')[1]));
+        return payload.role || 2; // Предполагаем, что в токене есть поле role
+      }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  }
+  return null;
+};
+
+// Используйте так:
+const roleFromToken = getRoleFromToken();
+const role = useSelector((state: RootState) => state.user.role) || roleFromToken;
 
   // Обработчик события нажатия на кнопку "Выйти"
   const handleExit = async ()  => {
@@ -83,7 +104,7 @@ export const Header: React.FC = () => {
               </NavLink>
               
               {/* Иконка калькулятора */}
-            {isAuthenticated && (
+            {isAuthenticated && role == 2 &&(
               <>
               {hasDraft && (
               <>
@@ -112,6 +133,12 @@ export const Header: React.FC = () => {
               </>
               )}
               <Nav.Link as={Link} to="/my-orders">Мои заявки</Nav.Link>
+              </>
+            )}
+
+            {isAuthenticated && role == 1 && (
+              <>
+                <Nav.Link as={Link} to="/all-orders">Все заявки</Nav.Link>
               </>
             )}
               

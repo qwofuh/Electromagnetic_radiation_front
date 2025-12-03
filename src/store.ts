@@ -3,6 +3,7 @@ import filterReducer from "./slice/filterSlice";
 import deviceDetailReducer from "./slice/deviceDetailSlice";
 import userReducer from "./slice/userSlice";
 import draftResucer from "./slice/draftSlice"
+import ordersReducer from "./slice/ordersSlice"
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     deviceDetail: deviceDetailReducer,
     user: userReducer,
     draft: draftResucer,
+    orders: ordersReducer
   },
   devTools: true,
 });
