@@ -1,11 +1,11 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
+  "$schema": "https://schema.tauri.app/config/2.0.0",
   "productName": "emission_calculation",
   "version": "0.1.0",
   "identifier": "com.emission.calculation",
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "https://localhost:3000/Electromagnetic_radiation_front",
+    "devUrl": "http://localhost:3000",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
@@ -21,9 +21,8 @@
       }
     ],
     "security": {
-    "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: http: https: ws: wss:; connect-src 'self' http: https: ws: wss:; img-src 'self' data: blob: http: https: *;",
-    "dangerousDisableAssetCspModification": false
-  }
+      "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: http: https: ws: wss:; connect-src 'self' http: https: ws: wss:; img-src 'self' data: blob: http: https: *;"
+    }
   },
   "bundle": {
     "active": true,
@@ -35,5 +34,6 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
-  }
+  },
+  "plugins": {}
 }

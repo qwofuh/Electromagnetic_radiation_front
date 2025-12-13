@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import mkcert from 'vite-plugin-mkcert'
 import fs from 'fs'
 import path from 'path'
-import {api_proxy_addr, img_proxy_addr, dest_root} from "./target_config"
+import {api_proxy_addr, img_proxy_addr, dest_root} from "./src/target_config"
 
 export default defineConfig({
   plugins: [

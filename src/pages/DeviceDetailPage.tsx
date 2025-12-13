@@ -4,7 +4,7 @@ import { Breadcrumbs } from "../components/Breadcrumbs";
 import { getDeviceById, type Device } from "../modules/deviceApi";
 import defaultImage from "../assets/DefaultImage.png";
 import "./DeviceDetailPage.css";
-import { dest_img } from "../../target_config"
+import { dest_img } from "../target_config"
 
 export const DeviceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -4,13 +4,16 @@ use tauri::Manager;
 pub fn run() {
   tauri::Builder::default()
     .setup(|app| {
-      let window = app.get_webview_window("main").unwrap();
-      
-      // ИСПРАВЛЕННЫЙ МЕТОД - используем open_devtools из WebviewWindow
       #[cfg(debug_assertions)]
       {
-        let _ = window.open_devtools();
+        // Используем eval для открытия devtools
+        let window = app.get_webview_window("main").unwrap();
+        let _ = window.eval("window.__TAURI__.window.getCurrentWindow().openDevTools()");
       }
+      
+      // Для отладки билда временно включаем eval
+      let window = app.get_webview_window("main").unwrap();
+      let _ = window.eval("window.__TAURI__.window.getCurrentWindow().openDevTools()");
       
       if cfg!(debug_assertions) {
         app.handle().plugin(

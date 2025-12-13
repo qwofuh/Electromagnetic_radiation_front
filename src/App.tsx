@@ -4,7 +4,7 @@ import { HomePage } from "./pages/HomePage";
 import { DevicesPage } from "./pages/DevicesPage";
 import { DeviceDetailPage } from "./pages/DeviceDetailPage";
 import { Header } from "./components/Header";
-import { dest_root } from "../target_config"
+import { dest_root } from "./target_config"
 
 export const App: React.FC = () => {
   return (

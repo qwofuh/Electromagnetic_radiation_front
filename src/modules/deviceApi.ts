@@ -1,4 +1,4 @@
-import { dest_api } from "../../target_config"
+import { dest_api } from "../target_config"
 
 export interface Device {
   id: number;

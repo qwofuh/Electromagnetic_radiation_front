@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./DeviceCard.css";
-import { dest_img } from "../../target_config"
+import { dest_img } from "../target_config"
 import defaultImage from "../assets/DefaultImage.png"
 
 export interface DeviceCardProps {
