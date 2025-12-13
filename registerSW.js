@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/Electromagnetic_radiation_front/sw.js', { scope: '/Electromagnetic_radiation_front/' })})}
