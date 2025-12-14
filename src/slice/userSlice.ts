@@ -126,8 +126,6 @@ export const checkAuthAsync = createAsyncThunk(
       console.log('CheckAuth - token from localStorage:', token ? 'exists' : 'missing');
       
       if (token) {
-        // Здесь можно добавить запрос для проверки валидности токена
-        // Например: const response = await api.api.usersIdList(userId);
         return { token, username: 'user' };
       }
       return rejectWithValue('Not authenticated');

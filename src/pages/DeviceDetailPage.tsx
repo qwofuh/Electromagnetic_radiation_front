@@ -32,8 +32,7 @@ export const DeviceDetailPage: React.FC = () => {
     if (!id) return;
 
     dispatch(getDeviceDetail(Number(id)));
-
-    // Очищаем устройство при размонтировании
+    
     return () => {
       dispatch(clearDevice());
     };

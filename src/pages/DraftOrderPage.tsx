@@ -34,20 +34,16 @@ useEffect(() => {
     // Если есть ID в URL
     if (urlOrderId === order_id?.toString()) {
       // Если открываем черновик
-      console.log('📦 Opening DRAFT order:', urlOrderId);
       dispatch(getDraftOrderDetails(urlOrderId));
     } else {
       // Если открываем другую заявку
-      console.log('📦 Opening SPECIFIC order:', urlOrderId);
       dispatch(getDraftOrderDetails(urlOrderId));
     }
   } else if (order_id) {
     // Если нет URL ID, но есть черновик - открываем черновик
-    console.log('📦 Redirecting to DRAFT:', order_id);
     navigate(`/emission_calculations/${order_id}`);
   } else {
     // Если нет ничего - ищем черновик
-    console.log('📦 Looking for DRAFT order');
     dispatch(getDraftCart());
   }
 }, [dispatch, urlOrderId, order_id, navigate]);
