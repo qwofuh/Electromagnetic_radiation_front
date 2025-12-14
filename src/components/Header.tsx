@@ -1,11 +1,28 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import { getCartInfo } from "../modules/deviceApi";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/home-icon.png";
 import "./Header.css";
 
 export const Header: React.FC = () => {
-  const calculationsCount = 0;
+
+  const [calculationsCount, setCalculationCount] = useState(0)
+  const [_requestId, setRequestId] = useState(-1)
+
+  useEffect(() => {
+
+    getCartInfo()
+      .then((data) => {
+        setCalculationCount(data.count);
+        setRequestId(data.request_id);
+      })
+      .catch(() => {
+        setCalculationCount(0);
+        setRequestId(-1);
+      });
+  }, []);
 
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">

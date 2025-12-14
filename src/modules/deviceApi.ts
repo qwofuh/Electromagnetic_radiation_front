@@ -27,6 +27,11 @@ export interface ServerDevice {
   Visability?: boolean;
 }
 
+export interface CartResponse {
+  request_id: number;
+  count: number;
+}
+
 export interface ServerDevicesResponse {
   devices: ServerDevice[];
   status: string;
@@ -126,4 +131,13 @@ export const getDeviceById = async (id: number): Promise<Device> => {
     
     return device;
   }
+};
+
+// Получение информации о корзине
+export const getCartInfo = async (): Promise<CartResponse> => {
+  const response = await fetch(`/api/emissions_calculation/draft/cart`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch cart info");
+  }
+  return response.json();
 };
