@@ -18,6 +18,7 @@ interface OrderData {
     customer_requirements?: string | null;
     distance?: number;
     status?: string;
+    total_emission?: number | null;
 }
 
 // Состояние черновой заявки
@@ -43,7 +44,8 @@ const initialState: DraftState = {
         order_name: '',
         description: '',
         customer_requirements: '',
-        status: ''
+        status: '',
+        total_emission: null,
     },
     error: null,
     loading: false,
@@ -103,41 +105,65 @@ export const addDeviceToDraftOrder = createAsyncThunk(
   }
 );
 
-export const saveDraftOrder = createAsyncThunk(
-  'draft/saveDraftOrder',
-  async ({ orderId, distance, devices }: { 
+// Сохраняем только расстояние
+export const saveDistanceOnly = createAsyncThunk(
+  'draft/saveDistanceOnly',
+  async ({ orderId, distance }: { 
     orderId: number; 
     distance: number; 
+  }, { rejectWithValue }) => {
+    try {
+      await api.api.emissionsCalculationIdUpdate(
+        orderId, 
+        { distance: distance },
+        {}
+      );
+      return { success: true };
+    } catch (error) {
+      return rejectWithValue('Ошибка сохранения расстояния');
+    }
+  }
+);
+
+// Сохраняем только мощности устройств
+export const saveDevicePowers = createAsyncThunk(
+  'draft/saveDevicePowers',
+  async ({ orderId, devices }: { 
+    orderId: number; 
     devices: DeviceInOrder[] 
   }, { rejectWithValue }) => {
     try {
-      // 1. Обновляем расстояние
-      await api.api.emissionsCalculationIdUpdate(
-        orderId, 
-        { distance: distance }, // request параметр
-        {} // params (опционально)
-      );
-      
-      // 2. Для каждого устройства обновляем мощность
       const updatePromises = devices.map(device => 
         api.api.emissionsCalculationDevicesOrderIdMaterialIdCustomPowerUpdate(
           orderId, 
           device.id!, 
-          { custom_power: device.custom_power || device.avg_min_power || 0 }, // request
-          {} // params
+          { custom_power: device.custom_power || device.avg_min_power || 0 },
+          {}
         )
       );
       
       await Promise.all(updatePromises);
-
-      await api.api.emissionsCalculationIdFormUpdate(orderId);
-      
       return { success: true };
     } catch (error) {
-      return rejectWithValue('Ошибка сохранения заявки');
+      return rejectWithValue('Ошибка сохранения мощностей устройств');
     }
   }
 );
+
+// Меняем только статус заявки (формируем финальную заявку)
+export const finalizeOrder = createAsyncThunk(
+  'draft/finalizeOrder',
+  async (orderId: number, { rejectWithValue }) => {
+    try {
+      await api.api.emissionsCalculationIdFormUpdate(orderId);
+      return { success: true };
+    } catch (error) {
+      return rejectWithValue('Ошибка формирования заявки');
+    }
+  }
+);
+
+
 
 export const removeDeviceFromOrder = createAsyncThunk(
   'draft/removeDeviceFromOrder',
@@ -268,8 +294,11 @@ const draftSlice = createSlice({
             description: action.payload.order.description || 'Описание отсутствует',
             customer_requirements: action.payload.order.customer_requirements || 'Требования не указаны',
             distance: action.payload.order.distance || 0,
-            status: action.payload.order.status || '' // ⬅️ добавь status
+            status: action.payload.order.status || '', // ⬅️ добавь status
+            total_emission: action.payload.order.total_emission || 0
         };
+        console.log('📦 Результат в корне:', action.payload.total_emission);
+console.log('📦 Все ключи ответа:', Object.keys(action.payload));
     }
 })
         .addCase(getDraftOrderDetails.rejected, (state, action) => {
